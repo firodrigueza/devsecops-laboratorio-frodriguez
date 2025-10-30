@@ -1,7 +1,7 @@
 name: Pipeline Laboratorio DevSecOps
 on:
   push:
-    branches: [ desarrollo ]
+    branches: [ main ]
   pull_request:
 
 jobs:
