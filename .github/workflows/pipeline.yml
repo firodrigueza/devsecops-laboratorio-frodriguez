@@ -42,7 +42,7 @@ jobs:
   #         else
   #           echo "✅ Sin vulnerabilidades relevantes."
   #         fi
-  # OwaspDC:
+  OwaspDC:
     name: OWASP Dependency Check
     runs-on: ubuntu-latest
 
