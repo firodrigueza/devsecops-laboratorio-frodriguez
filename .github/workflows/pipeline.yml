@@ -1,0 +1,33 @@
+name: Pipeline Laboratorio DevSecOps
+on:
+  push:
+    branches: [ main, feature/** ]
+  pull_request:
+
+jobs:
+  build:
+    name: Run SonarCloud
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # importante para análisis de "new code"
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@v2
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          args: >
+            -Dsonar.projectKey=movies-pipeline
+            -Dsonar.organization=tu-organizacion
+            -Dsonar.sources=.
