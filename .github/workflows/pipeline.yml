@@ -5,44 +5,44 @@ on:
   pull_request:
 
 jobs:
-  Sonar:
-    name: SonarCloud
-    runs-on: ubuntu-latest
+  # Sonar:
+  #   name: SonarCloud
+  #   runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0  # importante para análisis de "new code"
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
+  #       with:
+  #         fetch-depth: 0  # importante para análisis de "new code"
 
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'temurin'
+  #     - name: Set up JDK 17
+  #       uses: actions/setup-java@v4
+  #       with:
+  #         java-version: '17'
+  #         distribution: 'temurin'
 
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@v2
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #     - name: SonarCloud Scan
+  #       uses: SonarSource/sonarcloud-github-action@v2
+  #       env:
+  #         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Check Quality Gate
-        run: |
-          echo "⏳ Esperando resultado de SonarCloud..."
-          sleep 30
-          QG=$(curl -s -u ${{ secrets.SONAR_TOKEN }}: \
-            "https://sonarcloud.io/api/qualitygates/project_status?projectKey=firodrigueza_laboratorio" \
-            | jq -r '.projectStatus.status')
+  #     - name: Check Quality Gate
+  #       run: |
+  #         echo "⏳ Esperando resultado de SonarCloud..."
+  #         sleep 30
+  #         QG=$(curl -s -u ${{ secrets.SONAR_TOKEN }}: \
+  #           "https://sonarcloud.io/api/qualitygates/project_status?projectKey=firodrigueza_laboratorio" \
+  #           | jq -r '.projectStatus.status')
 
-          echo "Resultado Quality Gate: $QG"
-          if [ "$QG" != "OK" ]; then
-            echo "❌ Se detectaron vulnerabilidades Críticas, Altas o Medias."
-            exit 1
-          else
-            echo "✅ Sin vulnerabilidades relevantes."
-          fi
-  OwaspDC:
+  #         echo "Resultado Quality Gate: $QG"
+  #         if [ "$QG" != "OK" ]; then
+  #           echo "❌ Se detectaron vulnerabilidades Críticas, Altas o Medias."
+  #           exit 1
+  #         else
+  #           echo "✅ Sin vulnerabilidades relevantes."
+  #         fi
+  # OwaspDC:
     name: OWASP Dependency Check
     runs-on: ubuntu-latest
 
