@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    name: Run SonarCloud
+    name: SonarCloud
     runs-on: ubuntu-latest
 
     steps:
@@ -26,3 +26,19 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Check Quality Gate
+        run: |
+          echo "⏳ Esperando resultado de SonarCloud..."
+          sleep 30
+          QG=$(curl -s -u ${{ secrets.SONAR_TOKEN }}: \
+            "https://sonarcloud.io/api/qualitygates/project_status?projectKey=firodrigueza_laboratorio" \
+            | jq -r '.projectStatus.status')
+
+          echo "Resultado Quality Gate: $QG"
+          if [ "$QG" != "OK" ]; then
+            echo "❌ Se detectaron vulnerabilidades Críticas, Altas o Medias."
+            exit 1
+          else
+            echo "✅ Sin vulnerabilidades relevantes."
+          fi
