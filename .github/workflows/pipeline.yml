@@ -63,6 +63,16 @@ jobs:
           echo "✅ Reporte generado en carpeta ./reports"
           ls -l reports || true
       
+      - name: Validación reporte de OWASP Dependency Check
+        run: |
+          echo "Revisando severidades en el reporte"
+          if grep -E "CRITICAL|HIGH|MEDIUM" -R reports/; then
+            echo "❌ Vulnerabilidades detectadas en dependencias (SCA)."
+            exit 1
+          else
+            echo "✅ SCA limpio. Sin vulnerabilidades críticas, altas ni medias."
+          fi
+      
       - name: Subir reporte como artefacto
         uses: actions/upload-artifact@v4
         with:
