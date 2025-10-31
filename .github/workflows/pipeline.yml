@@ -62,4 +62,10 @@ jobs:
         run: |
           echo "✅ Reporte generado en carpeta ./reports"
           ls -l reports || true
+      
+      - name: Subir reporte como artefacto
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependency-check-report
+          path: reports/
 
