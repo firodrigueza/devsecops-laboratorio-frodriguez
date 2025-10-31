@@ -57,7 +57,13 @@ jobs:
           path: "."
           format: "HTML"
           out: "reports"
-
+      - name: Subir reporte como artefacto
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependency-check-report
+          path: reports/
+          
       - name: Mostrar resumen del reporte
         run: |
           echo "✅ Reporte generado en carpeta ./reports"
@@ -73,11 +79,7 @@ jobs:
             echo "✅ SCA limpio. Sin vulnerabilidades críticas, altas ni medias."
           fi
       
-      - name: Subir reporte como artefacto
-        uses: actions/upload-artifact@v4
-        with:
-          name: dependency-check-report
-          path: reports/
+      
   Build:
     name: Construccion Proyecto
     runs-on: ubuntu-latest
