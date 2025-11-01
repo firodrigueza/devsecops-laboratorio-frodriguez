@@ -129,7 +129,7 @@ jobs:
         continue-on-error: true
         run: |
           echo "🔍 Analizando vulnerabilidades en la imagen Docker..."
-          trivy image --format html -o trivy-report.html --severity CRITICAL,HIGH,MEDIUM firodrigueza_laboratorio:latest || true
+          trivy image --format template --template "@contrib/html.tpl" -o trivy-report.html --severity CRITICAL,HIGH,MEDIUM firodrigueza_laboratorio:latest
 
       - name: Subir reporte de Trivy
         if: always()
