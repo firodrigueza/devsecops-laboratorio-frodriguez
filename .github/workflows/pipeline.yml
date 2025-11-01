@@ -8,7 +8,6 @@ jobs:
   Sonar:
     name: SonarCloud
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -42,10 +41,11 @@ jobs:
           else
             echo "✅ Sin vulnerabilidades relevantes."
           fi
+  
   OwaspDC:
     name: OWASP Dependency Check
     runs-on: ubuntu-latest
-
+    needs: [Sonar]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
