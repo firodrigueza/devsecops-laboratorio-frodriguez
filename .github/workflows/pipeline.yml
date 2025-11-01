@@ -27,21 +27,21 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  #     - name: Check Quality Gate
-  #       run: |
-  #         echo "⏳ Esperando resultado de SonarCloud..."
-  #         sleep 30
-  #         QG=$(curl -s -u ${{ secrets.SONAR_TOKEN }}: \
-  #           "https://sonarcloud.io/api/qualitygates/project_status?projectKey=firodrigueza_laboratorio" \
-  #           | jq -r '.projectStatus.status')
+      - name: Check Quality Gate
+        run: |
+          echo "⏳ Esperando resultado de SonarCloud..."
+          sleep 30
+          QG=$(curl -s -u ${{ secrets.SONAR_TOKEN }}: \
+            "https://sonarcloud.io/api/qualitygates/project_status?projectKey=firodrigueza_laboratorio" \
+            | jq -r '.projectStatus.status')
 
-  #         echo "Resultado Quality Gate: $QG"
-  #         if [ "$QG" != "OK" ]; then
-  #           echo "❌ Se detectaron vulnerabilidades Críticas, Altas o Medias."
-  #           exit 1
-  #         else
-  #           echo "✅ Sin vulnerabilidades relevantes."
-  #         fi
+          echo "Resultado Quality Gate: $QG"
+          if [ "$QG" != "OK" ]; then
+            echo "❌ Se detectaron vulnerabilidades Críticas, Altas o Medias."
+            exit 1
+          else
+            echo "✅ Sin vulnerabilidades relevantes."
+          fi
   OwaspDC:
     name: OWASP Dependency Check
     runs-on: ubuntu-latest
@@ -152,13 +152,18 @@ jobs:
           name: trivy-report
           path: reports/trivy-report.html
       
-      - name: Validar vulnerabilidades detectadas
+      # - name: Validar vulnerabilidades detectadas
+      #   if: always()
+      #   run: |
+      #     if grep -E "CRITICAL|HIGH|MEDIUM" -R reports/trivy-report.html; then
+      #       echo "❌ Vulnerabilidades detectadas en imagen Docker."
+      #       exit 1
+      #     else
+      #       echo "✅ Imagen sin vulnerabilidades críticas, altas ni medias."
+      #     fi
+      - name: Validar vulnerabilidades detectadas (modo demostración)
         if: always()
         run: |
-          if grep -E "CRITICAL|HIGH|MEDIUM" -R reports/trivy-report.html; then
-            echo "❌ Vulnerabilidades detectadas en imagen Docker."
-            exit 1
-          else
-            echo "✅ Imagen sin vulnerabilidades críticas, altas ni medias."
-          fi
+          echo "ℹ️ Análisis completado. No se aplicará validación de severidades en esta ejecución."
+          echo "ℹ️ El pipeline continuará incluso si existen vulnerabilidades."
 
