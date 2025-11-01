@@ -127,8 +127,8 @@ jobs:
       
       - name: Construir imagen Docker para escaneo
         run: |
-          docker build -t firodrigueza_laboratorio:latest
-
+          docker build -t firodrigueza_laboratorio:latest .
+          
       - name: Escanear imagen Docker
         continue-on-error: true
         run: |
