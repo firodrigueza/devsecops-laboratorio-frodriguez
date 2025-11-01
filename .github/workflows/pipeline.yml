@@ -51,7 +51,6 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Ejecutar OWASP Dependency Check
-        continue-on-error: true
         uses: dependency-check/Dependency-Check_Action@main
         with:
           project: "DevSecOps-Lab"
@@ -130,7 +129,7 @@ jobs:
           docker build -t firodrigueza_laboratorio:latest .
 
       - name: Escanear imagen Docker
-        continue-on-error: true
+        # continue-on-error: true
         run: |
           echo "🔍 Escaneando imagen Docker..."
           mkdir -p reports
