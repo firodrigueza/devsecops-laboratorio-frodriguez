@@ -107,62 +107,62 @@ jobs:
       - name: Listar imágenes
         run: docker images
         
-  # Trivy:
-  #   name: Image Security
-  #   runs-on: ubuntu-latest
-  #   needs: [Build]
-  #   steps:
-  #     - name: Checkout código
-  #       uses: actions/checkout@v4
+  Trivy:
+    name: Image Security
+    runs-on: ubuntu-latest
+    needs: [Build]
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
 
-  #     - name: Instalar Trivy
-  #       run: |
-  #         sudo apt-get update -y
-  #         sudo apt-get install -y wget
-  #         TRIVY_VERSION=$(curl -s https://api.github.com/repos/aquasecurity/trivy/releases/latest | grep tag_name | cut -d '"' -f 4)
-  #         wget https://github.com/aquasecurity/trivy/releases/download/${TRIVY_VERSION}/trivy_${TRIVY_VERSION#v}_Linux-64bit.deb
-  #         sudo dpkg -i trivy_${TRIVY_VERSION#v}_Linux-64bit.deb
-  #         trivy --version
+      - name: Instalar Trivy
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y wget
+          TRIVY_VERSION=$(curl -s https://api.github.com/repos/aquasecurity/trivy/releases/latest | grep tag_name | cut -d '"' -f 4)
+          wget https://github.com/aquasecurity/trivy/releases/download/${TRIVY_VERSION}/trivy_${TRIVY_VERSION#v}_Linux-64bit.deb
+          sudo dpkg -i trivy_${TRIVY_VERSION#v}_Linux-64bit.deb
+          trivy --version
       
-  #     - name: Construir imagen Docker para escaneo
-  #       run: |
-  #         docker build -t firodrigueza_laboratorio:latest .
+      - name: Construir imagen Docker para escaneo
+        run: |
+          docker build -t firodrigueza_laboratorio:latest .
 
-  #     - name: Escanear imagen Docker
-  #       # continue-on-error: true
-  #       run: |
-  #         echo "🔍 Escaneando imagen Docker..."
-  #         mkdir -p reports
-  #         # 👇 descarga la plantilla HTML oficial
-  #         wget -O html.tpl https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/html.tpl
-  #         trivy image \
-  #           --format template \
-  #           --template "@html.tpl" \
-  #           --output reports/trivy-report.html \
-  #           --severity CRITICAL,HIGH,MEDIUM \
-  #           firodrigueza_laboratorio:latest || true
-  #         echo "📄 Reporte generado:"
-  #         ls -l reports || true
+      - name: Escanear imagen Docker
+        # continue-on-error: true
+        run: |
+          echo "🔍 Escaneando imagen Docker..."
+          mkdir -p reports
+          # 👇 descarga la plantilla HTML oficial
+          wget -O html.tpl https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/html.tpl
+          trivy image \
+            --format template \
+            --template "@html.tpl" \
+            --output reports/trivy-report.html \
+            --severity CRITICAL,HIGH,MEDIUM \
+            firodrigueza_laboratorio:latest || true
+          echo "📄 Reporte generado:"
+          ls -l reports || true
 
-  #     - name: Subir reporte de Trivy
-  #       if: always()
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         name: trivy-report
-  #         path: reports/trivy-report.html
+      - name: Subir reporte de Trivy
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: trivy-report
+          path: reports/trivy-report.html
       
-  #     # - name: Validar vulnerabilidades detectadas
-  #     #   if: always()
-  #     #   run: |
-  #     #     if grep -E "CRITICAL|HIGH|MEDIUM" -R reports/trivy-report.html; then
-  #     #       echo "❌ Vulnerabilidades detectadas en imagen Docker."
-  #     #       exit 1
-  #     #     else
-  #     #       echo "✅ Imagen sin vulnerabilidades críticas, altas ni medias."
-  #     #     fi
-  #     - name: Validar vulnerabilidades detectadas (modo demostración)
-  #       if: always()
-  #       run: |
-  #         echo "ℹ️ Análisis completado. No se aplicará validación de severidades en esta ejecución."
-  #         echo "ℹ️ El pipeline continuará incluso si existen vulnerabilidades."
+      # - name: Validar vulnerabilidades detectadas
+      #   if: always()
+      #   run: |
+      #     if grep -E "CRITICAL|HIGH|MEDIUM" -R reports/trivy-report.html; then
+      #       echo "❌ Vulnerabilidades detectadas en imagen Docker."
+      #       exit 1
+      #     else
+      #       echo "✅ Imagen sin vulnerabilidades críticas, altas ni medias."
+      #     fi
+      - name: Validar vulnerabilidades detectadas (modo demostración)
+        if: always()
+        run: |
+          echo "ℹ️ Análisis completado. No se aplicará validación de severidades en esta ejecución."
+          echo "ℹ️ El pipeline continuará incluso si existen vulnerabilidades."
 
