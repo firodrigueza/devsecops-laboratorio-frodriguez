@@ -128,12 +128,20 @@ jobs:
       - name: Construir imagen Docker para escaneo
         run: |
           docker build -t firodrigueza_laboratorio:latest .
-          
+
       - name: Escanear imagen Docker
         continue-on-error: true
         run: |
-          echo "🔍 Analizando vulnerabilidades en la imagen Docker..."
-          trivy image --format template --template "@contrib/html.tpl" -o trivy-report.html --severity CRITICAL,HIGH,MEDIUM firodrigueza_laboratorio:latest
+          echo "🔍 Escaneando imagen Docker..."
+          mkdir -p reports
+          trivy image \
+            --format template \
+            --template "https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/html.tpl" \
+            --output reports/trivy-report.html \
+            --severity CRITICAL,HIGH,MEDIUM \
+            firodrigueza_laboratorio:latest || true
+          echo "📄 Reporte generado:"
+          ls -l reports || true
 
       - name: Subir reporte de Trivy
         if: always()
