@@ -148,5 +148,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: trivy-report
-          path: trivy-report.html
+          path: reports/trivy-report.html
 
