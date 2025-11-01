@@ -134,9 +134,11 @@ jobs:
         run: |
           echo "🔍 Escaneando imagen Docker..."
           mkdir -p reports
+          # 👇 descarga la plantilla HTML oficial
+          wget -O html.tpl https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/html.tpl
           trivy image \
             --format template \
-            --template "https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/html.tpl" \
+            --template "@html.tpl" \
             --output reports/trivy-report.html \
             --severity CRITICAL,HIGH,MEDIUM \
             firodrigueza_laboratorio:latest || true
