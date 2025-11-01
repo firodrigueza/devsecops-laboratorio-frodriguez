@@ -151,18 +151,18 @@ jobs:
           name: trivy-report
           path: reports/trivy-report.html
       
-      # - name: Validar vulnerabilidades detectadas
-      #   if: always()
-      #   run: |
-      #     if grep -E "CRITICAL|HIGH|MEDIUM" -R reports/trivy-report.html; then
-      #       echo "❌ Vulnerabilidades detectadas en imagen Docker."
-      #       exit 1
-      #     else
-      #       echo "✅ Imagen sin vulnerabilidades críticas, altas ni medias."
-      #     fi
-      - name: Validar vulnerabilidades detectadas (modo demostración)
+      - name: Validar vulnerabilidades detectadas
         if: always()
         run: |
-          echo "ℹ️ Análisis completado. No se aplicará validación de severidades en esta ejecución."
-          echo "ℹ️ El pipeline continuará incluso si existen vulnerabilidades."
+          if grep -E "CRITICAL|HIGH|MEDIUM" -R reports/trivy-report.html; then
+            echo "❌ Vulnerabilidades detectadas en imagen Docker."
+            exit 1
+          else
+            echo "✅ Imagen sin vulnerabilidades críticas, altas ni medias."
+          fi
+      # - name: Validar vulnerabilidades detectadas (modo demostración)
+      #   if: always()
+      #   run: |
+      #     echo "ℹ️ Análisis completado. No se aplicará validación de severidades en esta ejecución."
+      #     echo "ℹ️ El pipeline continuará incluso si existen vulnerabilidades."
 
