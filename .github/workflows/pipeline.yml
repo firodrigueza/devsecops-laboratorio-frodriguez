@@ -124,6 +124,10 @@ jobs:
           wget https://github.com/aquasecurity/trivy/releases/download/${TRIVY_VERSION}/trivy_${TRIVY_VERSION#v}_Linux-64bit.deb
           sudo dpkg -i trivy_${TRIVY_VERSION#v}_Linux-64bit.deb
           trivy --version
+      
+      - name: Construir imagen Docker para escaneo
+        run: |
+          docker build -t firodrigueza_laboratorio:latest
 
       - name: Escanear imagen Docker
         continue-on-error: true
